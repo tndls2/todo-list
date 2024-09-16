@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 PROJECT_APPS = [
+    'accounts.apps.AccountsConfig',
+    'todos.apps.TodosConfig'
 ]
 
 THIRD_PARTY_APPS = [
