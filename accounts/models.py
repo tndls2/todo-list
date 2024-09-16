@@ -3,6 +3,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import BaseUserManager
 
+from core.utils.model import TimestampZone
+
 
 class UserManager(BaseUserManager):
     def create_user(self, user_name, password=None, **extra_fields):
@@ -35,12 +37,11 @@ class UserManager(BaseUserManager):
         return self.create_user(user_name, password, **extra_fields)
 
 
-class User(models.Model):
+class User(TimestampZone):
     # Django 내장 User 모델 및 기능을 사용하지 않고 직접 구현
     id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=150, unique=True)
     password = models.CharField(_("password"), max_length=128)
-    created_at = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
