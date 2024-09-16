@@ -37,6 +37,7 @@ class UserManager(BaseUserManager):
 
 class User(models.Model):
     # Django 내장 User 모델 및 기능을 사용하지 않고 직접 구현
+    id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=150, unique=True)
     password = models.CharField(_("password"), max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -57,7 +58,7 @@ class User(models.Model):
         Set the password for this user. The raw password is hashed and stored in the database.
         """
         self.password = make_password(raw_password)
-        self.save(update_fields=['password'])
+        self.save()
 
     def check_password(self, raw_password):
         """
@@ -70,6 +71,18 @@ class User(models.Model):
         Save the user instance, ensuring the password is properly hashed.
         """
         super().save(*args, **kwargs)
+
+    def has_perm(self, perm, obj=None):
+        """
+        Check if the user has a specific permission.
+        """
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        """
+        Check if the user has any permissions in a given app.
+        """
+        return self.is_superuser
 
     @property
     def is_anonymous(self):
