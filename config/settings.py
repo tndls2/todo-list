@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'debug_toolbar',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 DJANGO_APPS = [
@@ -153,4 +154,17 @@ REST_FRAMEWORK = {
             'core.utils.renderers.CustomRenderer',
             'rest_framework.renderers.BrowsableAPIRenderer',
         ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ),
+}
+
+SIMPLE_JWT = {
+    'UPDATE_LAST_LOGIN': True,
+    'USER_ID_FIELD': 'user_name',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
