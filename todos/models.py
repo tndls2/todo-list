@@ -15,7 +15,7 @@ class Todo(TimestampZone):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
     status = models.CharField(
-            choices=get_choices(TodoStatus), default=TodoStatus.NOT_YET, max_length=10, help_text='완료 상태'
+        choices=get_choices(TodoStatus), default=TodoStatus.NOT_YET, max_length=10, help_text='완료 상태'
     )
     title = models.CharField(max_length=64, blank=False, null=False)
     content = models.TextField(blank=True)
