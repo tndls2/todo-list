@@ -7,14 +7,12 @@ from core.utils.model import TimestampZone
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, user_name, password=None, **extra_fields):
+    def create_user(self, user_name, password, **extra_fields):
         """
         Create and return a regular user with a username and password.
         """
-        if not user_name:
-            raise ValueError('The User must have a user_name.')
-        if self.filter(user_name=user_name).exists():  # user_name 중복 체크
-            raise ValueError('A user with this user_name already exists.')
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
 
         user = self.model(user_name=user_name, **extra_fields)
         user.set_password(password)
@@ -22,7 +20,7 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, user_name, password=None, **extra_fields):
+    def create_superuser(self, user_name, password, **extra_fields):
         """
         Create and return a superuser with a username and password.
         """
@@ -34,6 +32,10 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
+        if self.filter(user_name=user_name).exists():
+            # user_name 중복 체크
+            raise ValueError('A user with this user_name already exists.')
+
         return self.create_user(user_name, password, **extra_fields)
 
 
@@ -41,7 +43,7 @@ class User(TimestampZone):
     # Django 내장 User 모델 및 기능을 사용하지 않고 직접 구현
     id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=150, unique=True)
-    password = models.CharField(_("password"), max_length=128)
+    password = models.CharField(max_length=128)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
