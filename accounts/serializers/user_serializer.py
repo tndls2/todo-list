@@ -4,8 +4,8 @@ from core.exceptions import FieldRequiredException
 
 
 class UserSignUpPostSerializer(serializers.Serializer):
-    user_name = serializers.CharField(required=False,  allow_blank=True)
-    password = serializers.CharField(required=False,  allow_blank=True)
+    user_name = serializers.CharField(required=False, allow_blank=True)
+    password = serializers.CharField(required=False, allow_blank=True)
 
     def validate(self, data):
         user_name = data.get('user_name')
@@ -21,8 +21,8 @@ class UserSignUpPostSerializer(serializers.Serializer):
 
 
 class UserLogInPostSerializer(serializers.Serializer):
-    user_name = serializers.CharField(required=False,  allow_blank=True)
-    password = serializers.CharField(required=False,  allow_blank=True)
+    user_name = serializers.CharField(required=False, allow_blank=True)
+    password = serializers.CharField(required=False, allow_blank=True)
 
     def validate(self, data):
         user_name = data.get('user_name')

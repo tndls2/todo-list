@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import SlidingToken, AccessToken
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from accounts.models import User
 from core.base_service import BaseService
@@ -20,7 +20,7 @@ class UserService(BaseService):
             raise UserNotAuthenticatedException()
 
         access_token = AccessToken.for_user(user)
-        refresh_token = SlidingToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user)
         jwt_token_output_dto = dict(
             access=str(access_token),
             refresh=str(refresh_token)
@@ -34,7 +34,7 @@ class UserService(BaseService):
 
         user = User.objects.create_user(user_name=user_name, password=password)
         access_token = AccessToken.for_user(user)
-        refresh_token = SlidingToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user)
         jwt_token_output_dto = dict(
             access=str(access_token),
             refresh=str(refresh_token)
