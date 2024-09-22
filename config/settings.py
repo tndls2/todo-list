@@ -149,7 +149,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
             'rest_framework.permissions.AllowAny',
         ],
-    'EXCEPTION_HANDLER': 'core.exception_handler.custom_exception_handler',
     'DEFAULT_RENDERER_CLASSES': [
             'core.utils.renderers.CustomRenderer',
             'rest_framework.renderers.BrowsableAPIRenderer',
