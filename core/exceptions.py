@@ -17,3 +17,8 @@ class FieldRequiredException(APIException):
 
     def __init__(self, field_name):
         self.detail = { "detail": f"{field_name}을(를) 입력해주세요." }
+
+
+class NoPermission(APIException):
+    status_code = 403
+    default_detail = "권한이 없습니다."
