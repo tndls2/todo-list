@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import BaseUserManager
 
 from core.utils.model import TimestampZone
@@ -47,6 +46,7 @@ class User(TimestampZone):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    last_login = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = []
@@ -61,7 +61,6 @@ class User(TimestampZone):
         Set the password for this user. The raw password is hashed and stored in the database.
         """
         self.password = make_password(raw_password)
-        self.save()
 
     def check_password(self, raw_password):
         """
