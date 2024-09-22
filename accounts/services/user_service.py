@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import SlidingToken
+from rest_framework_simplejwt.tokens import SlidingToken, AccessToken
 
 from accounts.models import User
 from core.base_service import BaseService
@@ -19,10 +19,11 @@ class UserService(BaseService):
         if user is None:
             raise UserNotAuthenticatedException()
 
-        jwt_token = SlidingToken.for_user(user)
+        access_token = AccessToken.for_user(user)
+        refresh_token = SlidingToken.for_user(user)
         jwt_token_output_dto = dict(
-            access=str(jwt_token),
-            refresh=str(jwt_token)
+            access=str(access_token),
+            refresh=str(refresh_token)
         )
         return jwt_token_output_dto
 
@@ -32,10 +33,11 @@ class UserService(BaseService):
             raise UserAlreadyExistsException()
 
         user = User.objects.create_user(user_name=user_name, password=password)
-        jwt_token = SlidingToken.for_user(user)
+        access_token = AccessToken.for_user(user)
+        refresh_token = SlidingToken.for_user(user)
         jwt_token_output_dto = dict(
-            access=str(jwt_token),
-            refresh=str(jwt_token)
+            access=str(access_token),
+            refresh=str(refresh_token)
         )
         return jwt_token_output_dto
 
