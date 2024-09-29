@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.exceptions import FieldRequiredException
-from todos.models import Todo
+from todos.models import Todo, TodoStatus
 
 
 class TodoSerializer(serializers.ModelSerializer):
@@ -11,7 +11,7 @@ class TodoSerializer(serializers.ModelSerializer):
 
 
 class TodoCreatePostSerializer(serializers.Serializer):
-    status = serializers.CharField(required=False, allow_blank=True)
+    status = serializers.IntegerField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
     content = serializers.CharField(required=False, allow_blank=True)
     due_date = serializers.DateTimeField(required=False, allow_null=True)
@@ -21,13 +21,16 @@ class TodoCreatePostSerializer(serializers.Serializer):
         title = data.get('title')
         due_date = data.get('due_date')
 
-        if not status:
+        if status is None:
             raise FieldRequiredException("status")
 
-        if not title:
+        if status not in TodoStatus.values:
+            raise serializers.ValidationError({"detail": "유효하지 않은 상태 값입니다."})
+
+        if title is None or title.strip() == "":
             raise FieldRequiredException("title")
 
-        if not due_date:
+        if due_date is None:
             raise FieldRequiredException("due_date")
 
         return data
@@ -46,7 +49,13 @@ class TodoListQsTodoSerializer(TodoSerializer):
 
 
 class TodoUpdatePostSerializer(serializers.Serializer):
-    status = serializers.CharField(required=False, allow_blank=True)
+    status = serializers.IntegerField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
     content = serializers.CharField(required=False, allow_blank=True)
     due_date = serializers.DateTimeField(required=False, allow_null=True)
+
+    def validate(self, data):
+        status = data.get('status')
+
+        if status is not None and status not in TodoStatus.values:
+            raise serializers.ValidationError({"detail": "유효하지 않은 상태 값입니다."})
