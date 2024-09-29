@@ -2,7 +2,8 @@ from accounts.models import User
 from core.base_service import BaseService
 from core.exceptions import NoPermission, TodoDoesNotExistException
 from todos.models import Todo, TodoStatus, TodoLog, Action
-from todos.serializers.todo_serializer import TodoRetrieveQsTodoSerializer, TodoListQsTodoSerializer
+from todos.serializers.todo_serializer import TodoRetrieveQsTodoSerializer, TodoListQsTodoSerializer, \
+    TodoListQsSerializer
 
 
 class TodoService(BaseService):
@@ -36,14 +37,15 @@ class TodoService(BaseService):
             user=user, status=TodoStatus.DONE.value
         ).order_by('due_date')
 
-        not_yet_serializer = TodoListQsTodoSerializer(not_yet_todos, many=True)
-        done_serializer = TodoListQsTodoSerializer(done_todos, many=True)
+        not_yet_todos_serialized = TodoListQsTodoSerializer(not_yet_todos, many=True).data
+        done_todos_serialized = TodoListQsTodoSerializer(done_todos, many=True).data
 
-        response_data = {
-            'not_yet_todos': not_yet_serializer.data,
-            'done_todos': done_serializer.data
-        }
-        return response_data
+        serializer = TodoListQsSerializer({
+            'not_yet_todos': not_yet_todos_serialized,
+            'done_todos': done_todos_serialized
+        })
+
+        return serializer.data
 
     def retrieve(self, id):
         # 인스턴스 가져오기

@@ -48,6 +48,11 @@ class TodoListQsTodoSerializer(TodoSerializer):
         fields = (*TodoSerializer.Meta.fields,)
 
 
+class TodoListQsSerializer(serializers.Serializer):
+    not_yet_todos = TodoListQsTodoSerializer(many=True)
+    done_todos = TodoListQsTodoSerializer(many=True)
+
+
 class TodoUpdatePostSerializer(serializers.Serializer):
     status = serializers.IntegerField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
