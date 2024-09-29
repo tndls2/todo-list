@@ -68,7 +68,7 @@ class TodoService(BaseService):
             setattr(todo, field, value)
         todo.save()
 
-        serializer = TodoUpdatePostSerializer(todo)
+        serializer = TodoRetrieveQsTodoSerializer(todo)
         return serializer.data
 
     def delete(self, id):
