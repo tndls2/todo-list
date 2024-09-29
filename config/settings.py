@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     'debug_toolbar',
     'corsheaders',
     'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
 
 DJANGO_APPS = [
@@ -156,6 +157,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
             'rest_framework_simplejwt.authentication.JWTAuthentication',
         ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
