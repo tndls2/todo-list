@@ -5,7 +5,7 @@ from accounts.views import UserViewSet
 
 app_name = 'accounts'
 
-router = SimpleRouter()
+router = SimpleRouter(trailing_slash=False)
 router.register('', UserViewSet, 'user')
 
 urlpatterns = [
