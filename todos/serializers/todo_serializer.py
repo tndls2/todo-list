@@ -46,5 +46,7 @@ class TodoListQsTodoSerializer(TodoSerializer):
 
 
 class TodoUpdatePostSerializer(serializers.Serializer):
-    pass
-
+    status = serializers.CharField(required=False, allow_blank=True)
+    title = serializers.CharField(required=False, allow_blank=True)
+    content = serializers.CharField(required=False, allow_blank=True)
+    due_date = serializers.DateTimeField(required=False, allow_null=True)

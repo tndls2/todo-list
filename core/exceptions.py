@@ -22,3 +22,8 @@ class FieldRequiredException(APIException):
 class NoPermission(APIException):
     status_code = 403
     default_detail = "권한이 없습니다."
+
+
+class TodoDoesNotExistException(APIException):
+    status_code = 404
+    default_detail = "해당 id의 todo가 존재하지 않습니다."

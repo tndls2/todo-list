@@ -1,8 +1,9 @@
 from accounts.models import User
 from core.base_service import BaseService
-from core.exceptions import NoPermission
+from core.exceptions import NoPermission, TodoDoesNotExistException
 from todos.models import Todo, TodoStatus
-from todos.serializers.todo_serializer import TodoRetrieveQsTodoSerializer, TodoListQsTodoSerializer
+from todos.serializers.todo_serializer import TodoRetrieveQsTodoSerializer, TodoListQsTodoSerializer, \
+    TodoUpdatePostSerializer
 
 
 class TodoService(BaseService):
@@ -40,6 +41,46 @@ class TodoService(BaseService):
             'done_todos': done_serializer.data
         }
         return response_data
+
+    def retrieve(self, id):
+        try:
+            todo = Todo.objects.get(id=id)
+        except Todo.DoesNotExist:
+            raise TodoDoesNotExistException()
+
+        if todo.user != self.user:
+            raise NoPermission()
+
+        serializer = TodoRetrieveQsTodoSerializer(todo)
+        return serializer.data
+
+    def update(self, id, data):
+        try:
+            todo = Todo.objects.get(id=id)
+        except Todo.DoesNotExist:
+            raise TodoDoesNotExistException()
+
+        if todo.user != self.user:
+            raise NoPermission()
+
+        # 필드 업데이트
+        for field, value in data.items():
+            setattr(todo, field, value)
+        todo.save()
+
+        serializer = TodoUpdatePostSerializer(todo)
+        return serializer.data
+
+    def delete(self, id):
+        try:
+            todo = Todo.objects.get(id=id)
+        except Todo.DoesNotExist:
+            raise TodoDoesNotExistException()
+
+        if todo.user != self.user:
+            raise NoPermission()
+
+        todo.delete()
 
     @property
     def user(self) -> User:

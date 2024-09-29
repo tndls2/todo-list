@@ -35,4 +35,19 @@ class TodoViewSet(viewsets.GenericViewSet):
 
         return Response(output_dto)
 
-# Create your views here.
+    def update(self, request: Request, pk):
+        id = int(pk)
+        serializer = TodoUpdatePostSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        service = TodoService(user=request.user)
+        output_dto = service.update(id=id, data=serializer.validated_data)
+
+        return Response(output_dto)
+
+    def delete(self, request: Request, pk):
+        id = int(pk)
+        service = TodoService(user=request.user)
+        service.delete(id=id)
+
+        return Response()
