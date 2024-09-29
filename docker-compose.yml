@@ -6,11 +6,11 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:5432"
     environment:
-      - POSTGRES_DB=todo_list
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=asdf
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
   server:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
