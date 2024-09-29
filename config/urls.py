@@ -19,12 +19,12 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainSlidingView, TokenRefreshSlidingView
 
 urlpatterns = [
-    path("admin", admin.site.urls),
+    path("admin/", admin.site.urls),
 
-    path('api/user', include('accounts.urls')),
-    path('api/todo', include('todos.urls')),
+    path('api/user/', include('accounts.urls')),
+    path('api/todo/', include('todos.urls')),
 
     # jwt api
-    path('api/token', TokenObtainSlidingView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh', TokenRefreshSlidingView.as_view(), name='token_refresh'),
+    path('api/token/', TokenObtainSlidingView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshSlidingView.as_view(), name='token_refresh'),
 ]

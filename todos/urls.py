@@ -5,7 +5,7 @@ from todos.views import TodoViewSet
 
 app_name = 'todos'
 
-router = SimpleRouter(trailing_slash=False)
+router = SimpleRouter()
 router.register('', TodoViewSet, 'todo')
 
 urlpatterns = [
